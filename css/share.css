@@ -1,0 +1,67 @@
+.icon-barshare {
+   height:30px;
+   overflow:hidden;
+  position: fixed;
+  top: 40%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+.icon-barshare:hover {height:auto;}
+
+.icon-barshare a {
+  display: block;
+  text-align: center;
+  padding: 4px;
+  transition: all 0.3s ease; 
+}
+
+.icon-barshare a:hover {
+  background-color: black;
+  color: #8bb03f;
+}
+
+.facebook {
+  background: #3B5998;
+  color: white;	
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topright: 5px;
+  border-top-right-radius: 5px;
+  font-size: 20px;
+}
+
+.twitter {
+  background: #55ACEE;
+  color: white;
+  font-size: 20px;
+}
+
+.reddit {
+  background: #e22700;
+  color: white;
+  font-size: 20px;
+}
+
+.pinterest {
+  background: #c4001f;
+  color: white;
+  font-size: 20px;
+}
+.copy {
+  background: #7f2c5b;
+  color: white;
+  font-size: 20px;
+}
+.html {
+  background: white;
+  color: black;
+  font-size: 20px;
+}
+.bbcode {
+  background: #8bb03f;
+  color: white;
+  -webkit-border-bottom-right-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  border-bottom-right-radius: 5px;
+  font-size: 20px;
+}
