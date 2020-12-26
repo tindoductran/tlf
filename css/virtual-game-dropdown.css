@@ -1,0 +1,34 @@
+					.dropbtnR {
+					  background-image: linear-gradient(#00608f,#2280Af);
+					  /*background-color: #00608f;*/
+					  color: white;
+					  border: none;
+					  padding: 0px 5px;
+					  border-radius: 3px;
+					}
+					.dropdownR {
+					  position: relative;
+					  display: inline-block;
+					  color: white;
+					}
+					.dropdownR-content {
+					  display: none;
+					  position: absolute;
+					  background-color: #2280Af;
+					  color: white;
+					  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+					  z-index: 1;
+					  border-radius: 3px;
+					}
+					.dropdownR-content a {
+					  text-align:left;
+					  color: white;
+					  text-decoration: none;
+					  display: block;
+					  padding: 0px 5px;
+					  white-space: nowrap;
+					}
+					.dropdownR-content a:hover {background-color: #62C0Ef; color:white;}
+					.dropdownR:hover .dropdownR-content {display: block;color:white;}
+					.dropdownR:hover .dropbtnR {background-image: linear-gradient(#40A0CF,#62C0EF);/*background-color: #40A0Cf;*/ color:white;}
+				
