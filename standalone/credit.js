@@ -1,0 +1,1 @@
+document.getElementById("credit").innerHTML = "<a href='https://thelotteryforum.com'>Brought to you by...</a>";
