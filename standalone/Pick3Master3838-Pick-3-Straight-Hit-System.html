@@ -1,0 +1,55 @@
+<html>
+<head><title>Pick3Master3838 Pick-3 Straight Hit System</title></head>
+<body>
+<link href="jsstyle.css" rel="stylesheet"></div>	
+<h3>Pick3Master3838 Pick-3 Straight Hit System</h3>
+<a href='https://www.lotterypost.com/thread/334589'>About this system...</a><br/>
+Enter Pick-3:<input type='text' id='input' value='541' size=3><br/>
+<input type='submit' value='Run/Process' onclick='run();'><br/>
+Output below:<br/>
+<div id='output'></div>
+<hr>
+<center><div id='credit'></div></center>
+</body>
+</html>
+<script src='credit.js'></script>
+<script src='jsprograms.js'></script>
+<script>
+function run(){
+	pick3 = document.getElementById('input').value;
+	output = "<table class='beta'>";
+	output += tablerowcolor(["Win No.","Minus",["Add",4]],"lightblue");
+
+	for (var i=0;i<10;i++){
+		minus = pick3[0] + (Math.abs(I(pick3[0])-I(pick3[1]))) + (Math.abs(I(pick3[1])-I(pick3[2])));
+		add_d1 = minus[0];
+		add_d2 = I(minus[0])+I(minus[1]);
+		if (add_d2 > 9){ //extension check for 2nd digit
+			add_d2 = "" + add_d2;
+			d2 = [add_d2[1],rootstr(add_d2)+""];
+		}else{
+			d2 = [add_d2+""];
+		}
+		add_d3 = I(minus[1])+I(minus[2]);
+		if (add_d3 > 9){ //extension check for 3rd digit
+			add_d3 = "" + add_d3;
+			d3 = [add_d3[1],rootstr(add_d3)+""];
+		}else{
+			d3 = [add_d3+""];
+		}
+		//create added numbers
+		adds = [];
+		for (var j=0;j<d2.length;j++){ //loop through possible digit 2 values
+			for (var k=0;k<d3.length;k++){ //loop through possible digit 3 values
+				adds.push("" + add_d1+d2[j]+d3[k]);
+			}
+		}
+		row = [pick3,minus].concat(adds);
+		output += tablerow(row);
+		pick3 = addstr(pick3,"111"); //calculate workour by +111 for next row
+	}
+	output += "</table>";
+	document.getElementById('output').innerHTML = output;
+}
+run();
+</script>

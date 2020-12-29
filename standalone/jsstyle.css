@@ -1,0 +1,25 @@
+textarea.myowntextarea {
+  height: 160px;
+}
+textarea.myowntextarea80 {
+  height: 80px;
+}
+textarea.myowntextarea160 {
+  height: 160px;
+}
+table.beta, table.beta th, table.beta td{
+  border-spacing:0px;
+  border:1px solid black;
+  font-size:14px;
+}
+table.beta th, table.beta td {
+  padding: 3px;
+  min-width: 15px;
+  color:black;
+}
+table.beta2, table.beta2 tr{
+  border-spacing:0px;
+  padding: 0px;
+  border:0px solid black;
+  font-size:14px;
+}
