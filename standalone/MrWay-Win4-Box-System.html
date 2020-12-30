@@ -1,0 +1,91 @@
+<html>
+<head><title>Mr.Way Win-4 Box System</title></head>
+<body>
+<link href="jsstyle.css" rel="stylesheet"></div>	
+<h3>Mr.Way Win-4 Box System</h3>
+<a href='https://www.lotterypost.com/thread/334979'>About this system...</a><br/>
+Jan=06 Feb=07 Mar=08 Apr=09 May=05 Jun=01<br/>
+Jul=02 Aug=03 Sep=04 Oct=15 Nov=16 Dec=17<br/>
+<table>
+<tr><td>Enter Month-Pair:</td><td><input type='text' id='input' value='' size=4></td></tr>
+<tr><td>Run-down:</td><td><input type='text' id='rundown' value='1317' size=4></td></tr>
+<tr><td>Number to apply:</td><td><input type='text' id='applynum' value='-2' size=4></td><td>to Triads to get 4 digits</td></tr>
+</table>
+<input type='submit' value='Run/Process' onclick='run();'><br/>
+
+Output below:<br/>
+<div id='output'></div>
+<hr>
+<center><div id='credit'></div></center>
+</body>
+</html>
+<script src='credit.js'></script>
+<script src='jsprograms.js'></script>
+<script>
+function run(){
+	monthpair = document.getElementById('input').value;
+	rundown = document.getElementById('rundown').value;
+	pick4 = monthpair + "01";
+	//do run down
+	nums = [];
+	output = "<table class='beta'>";
+	output += tablerowcolor(['run<br/>down','unique<br/>digits'],'lightblue');
+    for (var i=0;i<10;i++){
+    	uniques = [];
+    	for (var j=0;j<pick4.length;j++){
+    		if (!uniques.includes(pick4[j])){
+    			uniques.push(pick4[j]);
+    		}
+    	}
+    	row = [pick4,"("+uniques.length+")"];
+    	output += tablerow(row);
+    	nums.push(pick4);
+    	pick4 = addstr(pick4,rundown);
+    }
+	output += "</table>";
+	//get triads.
+	triads = [];
+	for (var i=0;i<nums.length;i++){
+		pick4 = nums[i];
+		for (var j=0;j<pick4.length-2;j++){
+			for (var k=j+1;k<pick4.length-1;k++){
+				for (var l=k+1;l<pick4.length;l++){
+					thistriad = pick4[j]+pick4[k]+pick4[l];
+					found = 0;
+					for (var m=0;m<triads.length;m++){
+						if (combo(thistriad)==combo(triads[m])){
+							found = 1;
+						}
+					}
+					if (found==0){
+						triads.push(thistriad);
+					}
+				}
+			}
+		}
+	}
+	//apply numbers to get 4th digits
+	applynum = I(document.getElementById('applynum').value);
+	applynums = [];
+	output += "<br/><b>Triads from above run-down: </b>" + triads.join(" ")+"<br/>";
+	output += "<br/><b>Pick4s from applying number to get 4th digits(below): </b><br/>";
+	for (var i=0;i<triads.length;i++){
+		triad = triads[i];
+		first4thdigit = (I(triad[0]) + applynum + 10) % 10;
+		second4thdigit = (I(triad[1]) + applynum + 10) % 10;
+		applynums.push(triad+first4thdigit);
+		applynums.push(triad+second4thdigit);
+		output += triad + " = " + triad+first4thdigit + " " + triad+second4thdigit + "<br/>";
+	}	
+	output += "<br/>Completed!<br/>";
+	document.getElementById('output').innerHTML = output;
+}
+function guess(){
+	var d = new Date();
+	var n = d.getMonth();
+	var monthpairs = ['06','07','08','09','05','01','02','03','04','15','16','17'];
+	document.getElementById("input").value = zpad2(monthpairs[n]);
+}
+guess();
+run();
+</script>
