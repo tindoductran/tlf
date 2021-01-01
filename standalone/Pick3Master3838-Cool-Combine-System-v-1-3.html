@@ -1,0 +1,108 @@
+<html>
+<head><title>Pick3Master3838 Pick-3 Cool-Combine System 000-999</title></head>
+<body>
+<link href="jsstyle.css" rel="stylesheet">
+<h3>Pick3Master3838 Pick-3 Cool-Combine System 000-999</h3>
+<a href='https://www.lotterypost.com/thread/334589'>About this system...</a><br/>
+<!-- Enter Pick-3:<input type='text' id='input' value='262' size=3><br/> -->
+Enter variables to be added (with carry-over below):<br/>
+<textarea id='variables' cols=80 rows=10>120 102 210 201 021 012 121 112 211 122
+212 221 123 132
+213 231 321 312 124
+142
+214
+241 421 412 125
+152 215 251 521 512 126 162 216 261 621 612 127
+172 217,271,712,721,128,182,218
+281-821-812-129-192-219-291-921-912</textarea><br/>
+<input type='submit' value='Run/Process' onclick='run();'><br/>
+Output below:<br/>
+<div id='output'></div>
+<hr>
+<center><div id='credit'><a href='https://thelotteryforum.com'>Brought to you by...</a></div></center>
+</body>
+</html>
+<script src='credit.js'></script>
+<script src='jsprograms.js'></script>
+<script>
+function run(){
+	output = ""
+	for (var z=0;z<1000;z++){ //loop big
+	pick3 = zpad3(z);
+
+	// pick3 = document.getElementById('input').value;
+	// output = "Straight Hit Results:<br/><table class='beta'>";
+	// output += tablerowcolor(["Win No.","Minus",["Add",4]],"lightblue");
+	extensions = [];
+	for (var i=0;i<10;i++){
+		minus = pick3[0] + (Math.abs(I(pick3[0])-I(pick3[1]))) + (Math.abs(I(pick3[1])-I(pick3[2])));
+		extensions.push(minus);
+		add_d1 = minus[0];
+		add_d2 = I(minus[0])+I(minus[1]);
+		if (add_d2 > 9){ //extension check for 2nd digit
+			add_d2 = "" + add_d2;
+			d2 = [add_d2[1],rootstr(add_d2)+""];
+		}else{
+			d2 = [add_d2+""];
+		}
+		add_d3 = I(minus[1])+I(minus[2]);
+		if (add_d3 > 9){ //extension check for 3rd digit
+			add_d3 = "" + add_d3;
+			d3 = [add_d3[1],rootstr(add_d3)+""];
+		}else{
+			d3 = [add_d3+""];
+		}
+		//create added numbers
+		adds = [];
+		for (var j=0;j<d2.length;j++){ //loop through possible digit 2 values
+			for (var k=0;k<d3.length;k++){ //loop through possible digit 3 values
+				add = "" + add_d1+d2[j]+d3[k];
+				adds.push(add);
+				extensions.push(add);
+			}
+		}
+		row = [pick3,minus].concat(adds);
+		// output += tablerow(row);
+		pick3 = addstr(pick3,"111"); //calculate workour by +111 for next row
+	}
+	// output += "</table>";
+	// output += "Friendly Program Result<br/>";
+    pick3 = parseInt(zpad(z));
+	variables = document.getElementById('variables').value.replace(/[^0-9]/g,' ').split(" ");
+	validvars = [];
+	for (var i=0;i<variables.length;i++){
+		if (variables[i].length>0){ validvars.push(variables[i])};
+	}
+	results = [];resultsp3 = []; combos = [];
+	for (var i=0;i<validvars.length;i++){
+		thisresult = (pick3 + parseInt(validvars[i])); //actual addition
+		thisresultp3 = ("00" + thisresult).slice(-3); //take the right 3 digits with zero padding
+		results.push(thisresult);
+		resultsp3.push(thisresultp3);
+		thiscombo = thisresultp3.split("").sort().join("");
+		if (!combos.includes(thiscombo)){
+			combos.push(thiscombo);
+		}
+	}
+	sortedcombos = combos.sort();
+	// output += "<b>Addition results:</b> " + results.join(" ") + "<br/>";
+	// output += "<b>Pick3s from results:</b> " + resultsp3.join(" ") + "<br/>";
+	// output += "<b>Pick3s combos from above:</b> " + combos.join(" ") + "<br/>";
+	// output += "<b>Pick3s sorted combos:</b>" + sortedcombos.join(" ") + "<br/>";
+	// output += "<br/>Completed!<br/>";
+	
+	inboth = [];
+	for (var i=0;i<extensions.length;i++){
+		thiscombo = combo(extensions[i]);
+		if (sortedcombos.includes(thiscombo)){
+			inboth.push(extensions[i]);
+		}
+	}
+	output += "<b>";
+	output += zpad3(z)+"- " + (inboth.length == 0?"nothing":inboth.join(" ")) + "</b><br/>";
+}
+	output += "<br/></b>Completed!<br/>";
+	document.getElementById('output').innerHTML = output;
+}
+run();
+</script>
