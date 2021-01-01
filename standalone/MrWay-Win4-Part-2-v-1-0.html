@@ -1,0 +1,48 @@
+<html>
+<head><title>Mr.Way Win-4 Part 2</title></head>
+<body>
+<link href="jsstyle.css" rel="stylesheet"></div>	
+<h3>Mr.Way Win-4 Part 2</h3>
+<a href='https://www.lotterypost.com/thread/334991'>About this system...</a><br/>
+<table>
+<tr><td bgcolor='yellow'>Enter Pick-4:</td><td><input type='text' id='input' value='0123' size=4></td></tr>
+<tr><td bgcolor='yellow'>Apply:</td><td><input type='text' id='applynum' value='-2' size=4></td><td>to Each number</td></tr>
+</table>
+<input type='submit' value='Run/Process' onclick='run();'><br/>
+Output below:<br/>
+<div id='output'></div>
+<hr>
+<center><div id='credit'></div></center>
+</body>
+</html>
+<script src='credit.js'></script>
+<script src='jsprograms.js'></script>
+<script>
+function run(){
+	output = "";
+	pick4 = document.getElementById('input').value;
+	perms = permut(pick4);
+	output += "Permutations: " + perms.join(" ") + "<br/>";
+	applied = [];
+	for (var i=0;i<perms.length;i++){
+		apply = addstr(perms[i],"5091");
+		applied.push(apply);
+	}
+	output += "Applying Mirror,Same,-1,1(aka 5091): " + applied.join(" ") + "<br/>";
+	applynum = I(document.getElementById('applynum').value);
+	output += "Apply to " + applynum + " each number's digits below:<br/>";
+	applynum = (10+applynum) % 10; //make a single positive digit
+	applyperms = permut("000"+applynum);
+	for (var i=0;i<applied.length;i++){
+		output += applied[i] + " = ";
+		for (var j=0;j<applyperms.length;j++){
+			thisnum = addstr(applied[i],applyperms[j]);
+			output += thisnum + " ";
+		}
+		output += "<br/>";
+	}
+	output += "<br/>Completed!<br/>";
+	document.getElementById('output').innerHTML = output;
+}
+run();
+</script>
