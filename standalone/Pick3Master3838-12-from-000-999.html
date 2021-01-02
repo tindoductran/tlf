@@ -1,0 +1,43 @@
+<html>
+<head><title>Pick3Master3838 12 From 000-999</title></head>
+<body>
+<link href="jsstyle.css" rel="stylesheet">
+<h3>Pick3Master3838 Pick-3 Cool-Combine System 000-999</h3>
+<a href='https://www.lotterypost.com/thread/334589'>About this system...</a><br/>
+<!-- Enter Pick-3:<input type='text' id='input' value='262' size=3><br/> -->
+<input type='submit' value='Run/Process' onclick='run();'><br/>
+Output below:<br/>
+<div id='output'></div>
+<hr>
+<center><div id='credit'><a href='https://thelotteryforum.com'>Brought to you by...</a></div></center>
+</body>
+</html>
+<script src='credit.js'></script>
+<script src='jsprograms.js'></script>
+<script>
+function has12orsum12(n){
+	c = combo(n);
+	if (c.includes("12")){
+		return true; //has 12 in it
+	}
+	sum = I(n[0]+n[1]+n[2]);
+	if (sum==12){
+		return true; //has sum of 12
+	}
+	return false;
+}	
+function run(){
+	output = "Numbers that contains 12 (any order) or sum is 12 are shown below:<br/>";
+	num12s = [];
+	for (var z=0;z<1000;z++){
+		pick3 = zpad3(z);
+		if (has12orsum12(pick3)){
+			num12s.push(pick3);
+		}
+	}	
+	output += num12s.join(" ");
+	output += "<br/></b>Completed!<br/>";
+	document.getElementById('output').innerHTML = output;
+}
+run();
+</script>
