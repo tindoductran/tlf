@@ -1,0 +1,60 @@
+<html>
+<head><title>Goseahawks-Doubles-Mirror-Flips</title></head>
+<body>
+<link href="jsstyle.css" rel="stylesheet">
+<h3>Goseahawks Doubles-Mirror-Flips</h3>
+<a href='https://www.lotterypost.com/thread/334696'>About this system...</a><br/>
+Enter a Pick-3 Double:<input type='text' id='input' value='887' size=3><br/>
+<input type='submit' value='Run/Process' onclick='run();'><br/>
+Output below:<br/>
+<div id='output'></div>
+<hr>
+<center><div id='credit'><a href='https://thelotteryforum.com'>Brought to you by...</a></div></center>
+</body>
+</html>
+<script src='credit.js'></script>
+<script src='jsprograms.js'></script>
+<script>
+function run(){
+	output = "";
+	input = document.getElementById("input").value;
+	uniques = [];
+	for (var i=0;i<input.length;i++){
+		u = input[i];
+		if (!uniques.includes(u)){
+			uniques.push(u);
+		}
+	}
+	if (uniques.length != 2){
+		output += "Not a double Pick-3!";
+	}else{
+		mirror1 = "555";
+		mirror2 = "";
+		mirror3 = "";
+		for (var i=0;i<input.length;i++){
+			if (input[i] == uniques[0]){ //if it's the first symbol
+				mirror2 += "0";
+				mirror3 += "5";
+			}else{
+				mirror2 += "5";
+				mirror3 += "0";
+			}
+		}
+		mirror1 = addstr(input,mirror1);
+		mirror2 = addstr(input,mirror2);
+		mirror3 = addstr(input,mirror3);
+		output += [mirror1,mirror2,mirror3].join(" ") + "<br/>";
+		flip1 = addstr(mirror1,"777");
+		flip2 = addstr(mirror2,"777");
+		flip3 = addstr(mirror3,"777");
+		output += [flip1,flip2,flip3].join(" ") + "<br/>";
+		flip1 = addstr(mirror1,"333");
+		flip2 = addstr(mirror2,"333");
+		flip3 = addstr(mirror3,"333");
+		output += [flip1,flip2,flip3].join(" ") + "<br/>";
+	}
+	output += "<br/></b>Completed!<br/>";
+	document.getElementById('output').innerHTML = output;
+}
+run();
+</script>
