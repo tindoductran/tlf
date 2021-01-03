@@ -1,0 +1,132 @@
+<html>
+<head><title>CESARFC2000 Triples Number Strategy</title></head>
+<body>
+<link href="jsstyle.css" rel="stylesheet">
+<h3>CESARFC2000 Triples Number Strategy</h3>
+<a href='https://www.lotterypost.com/thread/329313'>About this system...</a><br/>
+<table><tr>
+<td align='right' bgcolor='yellow'>Enter Pick-3:</td><td><input type='text' size=3 id='input' value='016'></td></tr></table>
+<input type='submit' id='runprocess' value='Run/Process' onclick='run();'/><br/>
+Output below:<br/>
+<div id="output"></div>
+<hr>
+<center><div id='credit'><a href='https://thelotteryforum.com'>Brought to you by...</a></div></center>
+</body>
+</html>
+<script src='credit.js'></script>
+<script src='jsprograms.js'></script>
+<script>
+function matchNmirror(s){
+var r = [];
+//last digit mirror
+r.push(addstr(s,"105"));
+r.push(addstr(s,"015"));
+r.push(addstr(s,"905"));
+r.push(addstr(s,"095"));
+r.push(addstr(s,"115"));
+r.push(addstr(s,"995"));
+//2nd last digit mirror
+r.push(addstr(s,"150"));
+r.push(addstr(s,"051"));
+r.push(addstr(s,"950"));
+r.push(addstr(s,"059"));
+r.push(addstr(s,"151"));
+r.push(addstr(s,"959"));
+//1st last digit mirror
+r.push(addstr(s,"510"));
+r.push(addstr(s,"501"));
+r.push(addstr(s,"590"));
+r.push(addstr(s,"509"));
+r.push(addstr(s,"511"));
+r.push(addstr(s,"599"));
+
+r.push(addstr(s,"100"));
+r.push(addstr(s,"010"));
+r.push(addstr(s,"900"));
+r.push(addstr(s,"090"));
+r.push(addstr(s,"110"));
+r.push(addstr(s,"990"));
+//2nd last digit mirror
+r.push(addstr(s,"100"));
+r.push(addstr(s,"001"));
+r.push(addstr(s,"900"));
+r.push(addstr(s,"009"));
+r.push(addstr(s,"101"));
+r.push(addstr(s,"909"));
+//1st last digit mirror
+r.push(addstr(s,"010"));
+r.push(addstr(s,"001"));
+r.push(addstr(s,"090"));
+r.push(addstr(s,"009"));
+r.push(addstr(s,"011"));
+r.push(addstr(s,"099"));
+
+r.push(addstr(s,"101"));
+r.push(addstr(s,"011"));
+r.push(addstr(s,"901"));
+r.push(addstr(s,"091"));
+r.push(addstr(s,"111"));
+r.push(addstr(s,"991"));
+//2nd last digit mirror
+r.push(addstr(s,"110"));
+r.push(addstr(s,"011"));
+r.push(addstr(s,"910"));
+r.push(addstr(s,"019"));
+r.push(addstr(s,"111"));
+r.push(addstr(s,"919"));
+//1st last digit mirror
+r.push(addstr(s,"110"));
+r.push(addstr(s,"101"));
+r.push(addstr(s,"190"));
+r.push(addstr(s,"109"));
+r.push(addstr(s,"111"));
+r.push(addstr(s,"199"));
+
+r.push(addstr(s,"109"));
+r.push(addstr(s,"019"));
+r.push(addstr(s,"909"));
+r.push(addstr(s,"099"));
+r.push(addstr(s,"119"));
+r.push(addstr(s,"999"));
+//2nd last digit mirror
+r.push(addstr(s,"190"));
+r.push(addstr(s,"091"));
+r.push(addstr(s,"990"));
+r.push(addstr(s,"099"));
+r.push(addstr(s,"191"));
+r.push(addstr(s,"999"));
+//1st last digit mirror
+r.push(addstr(s,"910"));
+r.push(addstr(s,"901"));
+r.push(addstr(s,"990"));
+r.push(addstr(s,"909"));
+r.push(addstr(s,"911"));
+r.push(addstr(s,"999"));
+return r;
+}
+
+function run(){
+output = "";
+input = document.getElementById('input').value;
+nums = matchNmirror(input);
+output += "Match and Mirrors and +1/-2 formations numbers:<br/>" + nums.join(", ") + "<br/>";
+trips = [];
+for (var i=0;i<nums.length;i++){
+num = nums[i];
+if (num[0]==num[1] && num[1]==num[2]){
+if (!trips.includes(num)){
+trips.push(num);
+}
+}
+}
+if (trips.length>0){
+output += "<b>Triples:" + trips.join(", ") + "</b><br/>";
+}else{
+output += "No Triples found!<br/>";
+}
+output += "<br/>Completed!<br/>";
+document.getElementById("output").innerHTML = output;
+}
+
+run();
+</script>
