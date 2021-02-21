@@ -1,0 +1,43 @@
+<html>
+<head><title>Pick3Master3838 12-21 System</title></head>
+<body>
+<link href="jsstyle.css" rel="stylesheet"></div>	
+<h3>Pick3Master3838 12-21 System</h3>
+<a href='https://www.lotterypost.com/thread/335799'>About this system...</a><br/>
+Enter Pick-3:<input type='text' id='input' value='502' size=3><br/>
+<input type='submit' value='Run/Process' onclick='run();'><br/>
+Output below:<br/>
+<div id='output'></div>
+<hr>
+<center><div id='credit'></div></center>
+</body>
+</html>
+<script src='credit.js'></script>
+<script src='jsprograms.js'></script>
+<script>
+function run(){
+	output = "";
+	pick3 = document.getElementById('input').value;
+	n1 = pick3.slice(0,2);
+	n2 = pick3.slice(1,3);
+	str = addstr(n1,'12') + addstr(n2,'12') + addstr(n1,'89') + addstr(n2,'89');
+	output += str + "<br/>";
+	nums = [];
+	for (var i=0;i<str.length-2;i++){
+		for (var j=i+1;j<str.length-1;j++){
+			for (var k=j+1;k<str.length;k++){
+				num = str[i]+str[j]+str[k];
+				if (!nums.includes(num)){
+					nums.push(num);
+					output += num + " ";
+				}
+			}
+		}
+		output += "<br/>";
+	}
+
+	output += "<br/>Completed</br/>";
+	document.getElementById('output').innerHTML = output;
+}
+run();
+</script>
