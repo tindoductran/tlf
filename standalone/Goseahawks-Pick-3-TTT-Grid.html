@@ -1,0 +1,47 @@
+<html>
+<head><title>Goseahawks-216-TTT-Grid</title></head>
+<body>
+<link href="jsstyle.css" rel="stylesheet">
+<h3>Goseahawks Doubles-Mirror-Flips</h3>
+<a href='https://www.lotterypost.com/thread/335835'>About this system...</a><br/>
+<table><tr><td bgcolor='yellow'>Enter Last Pick-3 Hit:</td><td><input type='text' id='input' value='149' size=3></td></tr></table>
+<input type='submit' value='Run/Process' onclick='run();'><br/>
+Output below:<br/>
+<div id='output'></div>
+<hr>
+<center><div id='credit'><a href='https://thelotteryforum.com'>Brought to you by...</a></div></center>
+</body>
+</html>
+<script src='credit.js'></script>
+<script src='jsprograms.js'></script>
+<script>
+function run(){
+	output = "";
+	input = document.getElementById("input").value;
+	output += "<table class='beta'>";
+	output += tablerowcolor(['2','1','6'],"lightblue");
+	output += tablerowcolor(input.split(""),'yellow');
+	//216- formula 
+	//+149
+	for (var i=0;i<10;i++){
+		if (i == 0){
+			next = addstr("216",input);
+		}else{
+			next = addstr(next,"111");
+		}
+		row = next.split("");
+		for (j=0;j<row.length;j++){
+			if (row[j] == "5"){
+				row[j] = "<font color=red><b>"+row[j]+"</b></font>";
+			}
+		}
+		output += tablerow(row);
+	}
+
+	output += "</table>";
+	output += "<b>Now, play Numbers connected to digit <font color='red'><b>5</b></font> in grid!</b><br/>";
+	output += "<br/></b>Completed!<br/>";
+	document.getElementById('output').innerHTML = output;
+}
+run();
+</script>
