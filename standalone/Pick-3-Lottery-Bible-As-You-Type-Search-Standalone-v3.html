@@ -1,0 +1,79 @@
+<html>
+<head><title>Pick-3 Lottery Bible - As You Type Search - StandAlone</title></head>
+<body>
+<link href="jsstyle.css" rel="stylesheet">
+
+<h1>Pick-3 Lottery Bible - As You Type Search - Standalone</h1>
+<div style='font-size:28px'>
+<a href='https://www.lotterypost.com/thread/246647/189'>About this system...(LotteryPost.com)</a><br/>
+<script src="https://thelotteryforum.com/bible3_corrected.js"></script>
+1. Enter Your Data List with (each separated by newline):<br/>
+<textarea style='font-size:28px' id="pool" rows=5 cols="80" onkeyup='saveStorage()'>
+</textarea><br/><br/>
+Live-Search narrows down as you type:<input style='font-size:28px' type='text' id='searchs' value='' onkeyup='run();' on>
+<!-- <input type='submit' value='Run/Process' onclick='run();'><br/> -->
+<br/>
+<b>Live output will show below</b><br/>
+<div id="output" style='font-size:28px'></div>
+<script>
+  function getStorage(){
+    value = localStorage.getItem("mailroomlookup");
+    try {
+      if (value.length > 0){
+        return value;
+      }else{
+        return document.getElementById('pool').value;
+      }
+    }
+      catch(err) {
+        return "";
+    }
+    
+  }
+  function saveStorage(){
+    value = document.getElementById('pool').value;
+    localStorage.setItem("mailroomlookup", value);
+  }
+  function foundBoldReplace(data,search){
+    lowerCaseData = data.toLowerCase();
+    position = lowerCaseData.search(search);
+    if (position > -1){//found
+      ret_value = data.slice(0,position) + "<span style='font-weight:bold;color:red'>" + data.slice(position,position+search.length) + "</span>" + data.slice(position+search.length,);
+      return ret_value;
+    }
+    else{
+      return "";
+    }
+  }
+  document.getElementById('pool').value = getStorage();
+  function run(){
+    output = "";
+    searchs = document.getElementById('searchs').value.toLowerCase();
+    thepool = document.getElementById('pool').value;
+    thepool = thepool.split("\n");
+    var filtered = thepool.filter(function (el) {//filter out empty
+        return el != "";
+    });
+    thepool = filtered;
+    output += "<table class='beta' style='font-size:28px'>";
+    found = 0;
+    for (var i=0;i<thepool.length;i++){
+      foundValue = foundBoldReplace(thepool[i],searchs);
+      if (foundValue.length > 0){
+        output += "<tr><td style='font-size:28px'>" + foundValue + "</td></tr>";
+        found += 1;
+      }
+    }
+    output += "</table><br/>";
+    if (found == 0){
+      output = "No Entries found";
+    }else{
+      output += found + " entries found!";
+    }
+
+    document.getElementById('output').innerHTML = output;
+  }
+document.getElementById('pool').value = bible.join("\n");
+run();
+</script>
+</div>
