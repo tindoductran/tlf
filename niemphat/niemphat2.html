@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>MP3 and Image Player</title>
+</head>
+<body bgcolor='black'>
+	<center>
+	<img id="image" src="./ynam.jpg" width='400px'>
+	<audio id="audio" src="./menamo2.mp3"></audio><br/>
+	<input type='submit' value='Start' onclick='run()'><input type='submit' value='Stop' onclick='stop()'>
+</center>
+	<script>
+		// Define the images
+		var images = ["./ynam.jpg", "./ymo.jpg", "./ya.jpg", "./ydi.jpg", "./yda.jpg", "./yphat.jpg", "./ynam.jpg"];
+
+		// Initialize the index to 0
+		var index = 1;
+
+		// Play the audio every 6 seconds
+		soundtimer = 0;
+		imagetimer = 0;
+		function run(){
+			stop();
+			soundtimer = setInterval(function() {
+				document.getElementById("audio").play();
+			},0);
+
+			// var image = document.getElementById("image");
+			// // Change the image source to the next image
+			// image.src = images[index];
+			// // Increment the index
+			// index++;
+		// Change the image every second
+		    image.src = images[0];
+			index = 1;
+			imagetimer = setInterval(function() {
+			// Get the image element
+			image = document.getElementById("image");
+
+			// Change the image source to the next image
+			image.src = images[index];
+
+			// Increment the index
+			index++;
+
+			// If we have reached the end of the images array, reset the index to 0
+			if (index == images.length) {
+				index = 0;
+				stop();
+				run();
+			}
+			}, 1000);
+		}
+		function stop(){
+			s = document.getElementById("audio");
+			s.pause();
+			s.currentTime = 0;
+			clearInterval(soundtimer);
+			clearInterval(imagetimer);
+		}
+	</script>
+</body>
+</html>
