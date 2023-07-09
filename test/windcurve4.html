@@ -1,0 +1,1220 @@
+<meta charset='UTF-8'>
+<h2>Wind Curve Simulation - Experimentation Scribbed Drawing</h2>
+Using Wind Velocity and Direction to Push drawing point.<br/>
+Instructions:<br/>
+1. Load an image that has transparency and one continuous solid area.
+2. Draw Endlessly and it'll try scribbling in filled area (continous area).
+
+Using data from examples from <br/>
+<a href="https://victoria.weatherstats.ca/charts/wind-hourly.html">https://victoria.weatherstats.ca/charts/wind-hourly.html</a> (for Victoria BC Canada) or <br/>
+<a href="https://calgary.weatherstats.ca/charts/wind-hourly.html">https://calgary.weatherstats.ca/charts/wind-hourly.html</a> (for Calgary AB Canada)<br/>
+Click on the 10x to get as much data as we can. Select the chart.<br/>
+Ctrl+C and Paste it in a text editor like sublime (which is what I used) then <br/>
+Replace using regular expression Find<input type='text' value="(.*) ([0-9]{1,2}) km/h(.*)	([0-9]{1,3}) °" size=30> and Replace with <input type='text' value="$2,$4" size="5"><br/>
+This will allow us to paste the result into textarea below for program to understand wind speed,direction (one pair per line)<br/> (You can use other data you just have to format it as such speed km/hr comma then direction in degrees)<br/>
+If it goes out of bounds, just resize canvas and/or change StartX and StartY then click "Draw Wind Curve" again!<br/>
+<table><tr><td valign='top'>Simple Velocity,Direction Pair Format<br/><textarea cols=50 rows=10 id='data'>14,60
+13,60
+14,350
+14,360
+5,50
+11,320
+12,320
+18,340
+9,330
+11,330
+3,0
+10,340
+20,340
+13,330
+10,10
+6,10
+5,60
+5,230
+6,230
+10,160
+16,140
+13,150
+10,140
+7,10
+11,60
+6,320
+8,110
+28,320
+29,330
+3,50
+12,230
+12,220
+7,210
+7,170
+4,170
+4,220
+3,200
+3,260
+10,220
+5,250
+2,360
+4,160
+8,230
+10,160
+6,190
+8,190
+32,310
+13,150
+21,90
+8,120
+12,80
+2,360
+7,230
+7,100
+8,50
+8,10
+10,320
+15,330
+13,330
+20,330
+16,320
+13,320
+23,320
+26,320
+29,330
+19,330
+41,340
+45,340
+60,350
+57,340
+65,330
+58,330
+55,350
+53,350
+52,360
+40,320
+33,320
+31,310
+37,310
+54,310
+39,340
+11,300
+13,300
+15,320
+10,350
+9,340
+16,320
+16,310
+12,300
+12,310
+13,320
+25,30
+45,40
+48,40
+22,30
+25,50
+48,360
+27,40
+35,40
+29,30
+33,330
+8,240
+7,330
+8,360
+28,330
+9,270
+42,350
+42,360
+40,360
+37,350
+27,330
+29,350
+35,340
+15,360
+34,10
+42,10
+48,350
+57,360
+66,350
+57,360
+43,10
+27,270
+30,250
+13,160
+12,210
+7,90
+10,170
+9,110
+10,180
+4,120
+15,330
+10,330
+25,320
+30,340
+34,20
+11,30
+16,330
+13,50
+16,50
+12,70
+12,150
+28,150
+7,130
+33,160
+32,160
+21,170
+27,90
+28,160
+10,80
+5,290
+3,360
+5,280
+13,290
+3,340
+18,320
+10,340
+30,340
+8,340
+7,350
+18,40
+9,360
+12,300
+13,300
+14,310
+9,160
+13,310
+40,10
+52,10
+39,40
+34,50
+32,10
+30,20
+28,20
+29,40
+36,310
+19,310
+9,250
+12,290
+2,360
+17,320
+17,330
+8,300
+10,310
+3,250
+8,30
+13,290
+14,320
+19,330
+17,300
+24,330
+47,330
+20,290
+17,40
+30,80
+9,110
+21,60
+16,60
+16,40
+7,20
+19,40
+18,330
+10,340
+10,340
+8,20
+7,340
+8,340
+15,330
+4,250
+5,290
+21,330
+6,350
+25,30
+11,350
+11,180
+29,290
+30,190
+48,40
+39,50
+29,20
+26,40
+26,50
+34,40
+32,10
+23,360
+36,320
+3,350
+6,260
+5,290
+12,330
+15,320
+16,40
+6,330
+18,320
+9,340
+7,20
+17,320
+17,310
+16,300
+14,290
+7,250
+17,40
+12,60
+11,30
+28,70
+14,40
+5,60
+10,290
+14,300
+8,280</textarea><br><input type='submit' value='Create Random Data' onclick='randomdata()'><input type='submit' value='Shuffle Data' onclick='shuffledata();'></td><td valign='top'>Format like https://victoria.weatherstats.ca/charts/wind-hourly.html format<br/>
+<textarea cols=60 rows=10 id='datacomplex'>Jul 6 17:00 2023	 14 km/h 	  	60 °
+Jul 6 16:00 2023	 13 km/h 	  	60 °
+Jul 6 15:00 2023	 14 km/h 	  	350 °
+Jul 6 14:00 2023	 14 km/h 	  	360 °
+Jul 6 13:00 2023	 5 km/h 	  	50 °
+Jul 6 12:00 2023	 11 km/h 	  	320 °
+Jul 6 11:00 2023	 12 km/h 	  	320 °
+Jul 6 10:00 2023	 18 km/h 	  	340 °
+Jul 6 09:00 2023	 9 km/h 	  	330 °
+Jul 6 08:00 2023	 11 km/h 	  	330 °
+Jul 6 07:00 2023	 3 km/h 	  	0 °
+Jul 6 06:00 2023	 10 km/h 	  	340 °
+Jul 6 05:00 2023	 20 km/h 	  	340 °
+Jul 6 04:00 2023	 13 km/h 	  	330 °
+Jul 6 03:00 2023	 10 km/h 	  	10 °
+Jul 6 02:00 2023	 6 km/h 	  	10 °
+Jul 6 01:00 2023	 5 km/h 	  	60 °
+Jul 6 00:00 2023	 5 km/h 	  	230 °
+Jul 5 23:00 2023	 6 km/h 	  	230 °
+Jul 5 22:00 2023	 10 km/h 	  	160 °
+Jul 5 21:00 2023	 16 km/h 	  	140 °
+Jul 5 20:00 2023	 13 km/h 	  	150 °
+Jul 5 19:00 2023	 10 km/h 	  	140 °
+Jul 5 18:00 2023	 7 km/h 	  	10 °
+Jul 5 17:00 2023	 11 km/h 	  	60 °
+Jul 5 16:00 2023	 6 km/h 	  	320 °
+Jul 5 15:00 2023	 8 km/h 	  	110 °
+Jul 5 14:00 2023	 14 km/h 	 28 km/h 	320 °
+Jul 5 13:00 2023	 20 km/h 	 29 km/h 	330 °
+Jul 5 12:00 2023	 3 km/h 	  	50 °
+Jul 5 11:00 2023	 12 km/h 	  	230 °
+Jul 5 10:00 2023	 12 km/h 	  	220 °
+Jul 5 09:00 2023	 7 km/h 	  	210 °
+Jul 5 08:00 2023	 7 km/h 	  	170 °
+Jul 5 07:00 2023	 4 km/h 	  	170 °
+Jul 5 06:00 2023	 4 km/h 	  	220 °
+Jul 5 05:00 2023	 3 km/h 	  	200 °
+Jul 5 04:00 2023	 3 km/h 	  	260 °
+Jul 5 03:00 2023	 10 km/h 	  	220 °
+Jul 5 02:00 2023	 5 km/h 	  	250 °
+Jul 5 01:00 2023	 2 km/h 	  	360 °
+Jul 5 00:00 2023	 4 km/h 	  	160 °
+Jul 4 23:00 2023	 8 km/h 	  	230 °
+Jul 4 22:00 2023	 10 km/h 	  	160 °
+Jul 4 21:00 2023	 6 km/h 	  	190 °
+Jul 4 20:00 2023	 8 km/h 	  	190 °
+Jul 4 19:00 2023	 14 km/h 	 32 km/h 	310 °
+Jul 4 18:00 2023	 13 km/h 	  	150 °
+Jul 4 17:00 2023	 21 km/h 	  	90 °
+Jul 4 16:00 2023	 8 km/h 	  	120 °
+Jul 4 15:00 2023	 12 km/h 	  	80 °
+Jul 4 14:00 2023	 2 km/h 	  	360 °
+Jul 4 13:00 2023	 7 km/h 	  	230 °
+Jul 4 12:00 2023	 7 km/h 	  	100 °
+Jul 4 11:00 2023	 8 km/h 	  	50 °
+Jul 4 10:00 2023	 8 km/h 	  	10 °
+Jul 4 09:00 2023	 10 km/h 	  	320 °
+Jul 4 08:00 2023	 15 km/h 	  	330 °
+Jul 4 07:00 2023	 13 km/h 	  	330 °
+Jul 4 06:00 2023	 20 km/h 	  	330 °
+Jul 4 05:00 2023	 16 km/h 	  	320 °
+Jul 4 04:00 2023	 13 km/h 	  	320 °
+Jul 4 03:00 2023	 23 km/h 	  	320 °
+Jul 4 02:00 2023	 26 km/h 	  	320 °
+Jul 4 01:00 2023	 16 km/h 	 29 km/h 	330 °
+Jul 4 00:00 2023	 19 km/h 	  	330 °
+Jul 3 23:00 2023	 23 km/h 	 41 km/h 	340 °
+Jul 3 22:00 2023	 26 km/h 	 45 km/h 	340 °
+Jul 3 21:00 2023	 42 km/h 	 60 km/h 	350 °
+Jul 3 20:00 2023	 28 km/h 	 57 km/h 	340 °
+Jul 3 19:00 2023	 42 km/h 	 65 km/h 	330 °
+Jul 3 18:00 2023	 37 km/h 	 58 km/h 	330 °
+Jul 3 17:00 2023	 41 km/h 	 55 km/h 	350 °
+Jul 3 16:00 2023	 36 km/h 	 53 km/h 	350 °
+Jul 3 15:00 2023	 42 km/h 	 52 km/h 	360 °
+Jul 3 14:00 2023	 20 km/h 	 40 km/h 	320 °
+Jul 3 13:00 2023	 18 km/h 	 33 km/h 	320 °
+Jul 3 12:00 2023	 21 km/h 	 31 km/h 	310 °
+Jul 3 11:00 2023	 27 km/h 	 37 km/h 	310 °
+Jul 3 10:00 2023	 33 km/h 	 54 km/h 	310 °
+Jul 3 09:00 2023	 20 km/h 	 39 km/h 	340 °
+Jul 3 08:00 2023	 11 km/h 	  	300 °
+Jul 3 07:00 2023	 13 km/h 	  	300 °
+Jul 3 06:00 2023	 15 km/h 	  	320 °
+Jul 3 05:00 2023	 10 km/h 	  	350 °
+Jul 3 04:00 2023	 9 km/h 	  	340 °
+Jul 3 03:00 2023	 16 km/h 	  	320 °
+Jul 3 02:00 2023	 16 km/h 	  	310 °
+Jul 3 01:00 2023	 12 km/h 	  	300 °
+Jul 3 00:00 2023	 12 km/h 	  	310 °
+Jul 2 23:00 2023	 13 km/h 	  	320 °
+Jul 2 22:00 2023	 25 km/h 	  	30 °
+Jul 2 21:00 2023	 34 km/h 	 45 km/h 	40 °
+Jul 2 20:00 2023	 37 km/h 	 48 km/h 	40 °
+Jul 2 19:00 2023	 22 km/h 	  	30 °
+Jul 2 18:00 2023	 25 km/h 	  	50 °
+Jul 2 17:00 2023	 33 km/h 	 48 km/h 	360 °
+Jul 2 16:00 2023	 27 km/h 	  	40 °
+Jul 2 15:00 2023	 24 km/h 	 35 km/h 	40 °
+Jul 2 14:00 2023	 15 km/h 	 29 km/h 	30 °
+Jul 2 13:00 2023	 18 km/h 	 33 km/h 	330 °
+Jul 2 12:00 2023	 8 km/h 	  	240 °
+Jul 2 11:00 2023	 7 km/h 	  	330 °
+Jul 2 10:00 2023	 8 km/h 	  	360 °
+Jul 2 09:00 2023	 14 km/h 	 28 km/h 	330 °
+Jul 2 08:00 2023	 9 km/h 	  	270 °
+Jul 2 07:00 2023	 24 km/h 	 42 km/h 	350 °
+Jul 2 06:00 2023	 31 km/h 	 42 km/h 	360 °
+Jul 2 05:00 2023	 27 km/h 	 40 km/h 	360 °
+Jul 2 04:00 2023	 22 km/h 	 37 km/h 	350 °
+Jul 2 03:00 2023	 27 km/h 	  	330 °
+Jul 2 02:00 2023	 14 km/h 	 29 km/h 	350 °
+Jul 2 01:00 2023	 17 km/h 	 35 km/h 	340 °
+Jul 2 00:00 2023	 15 km/h 	  	360 °
+Jul 1 23:00 2023	 27 km/h 	 34 km/h 	10 °
+Jul 1 22:00 2023	 27 km/h 	 42 km/h 	10 °
+Jul 1 21:00 2023	 36 km/h 	 48 km/h 	350 °
+Jul 1 20:00 2023	 39 km/h 	 57 km/h 	360 °
+Jul 1 19:00 2023	 54 km/h 	 66 km/h 	350 °
+Jul 1 18:00 2023	 38 km/h 	 57 km/h 	360 °
+Jul 1 17:00 2023	 30 km/h 	 43 km/h 	10 °
+Jul 1 16:00 2023	 12 km/h 	 27 km/h 	270 °
+Jul 1 15:00 2023	 11 km/h 	 30 km/h 	250 °
+Jul 1 14:00 2023	 13 km/h 	  	160 °
+Jul 1 13:00 2023	 12 km/h 	  	210 °
+Jul 1 12:00 2023	 7 km/h 	  	90 °
+Jul 1 11:00 2023	 10 km/h 	  	170 °
+Jul 1 10:00 2023	 9 km/h 	  	110 °
+Jul 1 09:00 2023	 10 km/h 	  	180 °
+Jul 1 08:00 2023	 4 km/h 	  	120 °
+Jul 1 07:00 2023	 15 km/h 	  	330 °
+Jul 1 06:00 2023	 10 km/h 	  	330 °
+Jul 1 05:00 2023	 25 km/h 	  	320 °
+Jul 1 04:00 2023	 13 km/h 	 30 km/h 	340 °
+Jul 1 03:00 2023	 13 km/h 	 34 km/h 	20 °
+Jul 1 02:00 2023	 11 km/h 	  	30 °
+Jul 1 01:00 2023	 16 km/h 	  	330 °
+Jul 1 00:00 2023	 13 km/h 	  	50 °
+Jun 30 23:00 2023	 16 km/h 	  	50 °
+Jun 30 22:00 2023	 12 km/h 	  	70 °
+Jun 30 21:00 2023	 12 km/h 	  	150 °
+Jun 30 20:00 2023	 15 km/h 	 28 km/h 	150 °
+Jun 30 19:00 2023	 7 km/h 	  	130 °
+Jun 30 18:00 2023	 22 km/h 	 33 km/h 	160 °
+Jun 30 17:00 2023	 17 km/h 	 32 km/h 	160 °
+Jun 30 16:00 2023	 21 km/h 	  	170 °
+Jun 30 15:00 2023	 13 km/h 	 27 km/h 	90 °
+Jun 30 14:00 2023	 15 km/h 	 28 km/h 	160 °
+Jun 30 13:00 2023	 10 km/h 	  	80 °
+Jun 30 12:00 2023	 5 km/h 	  	290 °
+Jun 30 11:00 2023	 3 km/h 	  	360 °
+Jun 30 10:00 2023	 5 km/h 	  	280 °
+Jun 30 09:00 2023	 13 km/h 	  	290 °
+Jun 30 08:00 2023	 3 km/h 	  	340 °
+Jun 30 07:00 2023	 18 km/h 	  	320 °
+Jun 30 06:00 2023	 10 km/h 	  	340 °
+Jun 30 05:00 2023	 14 km/h 	 30 km/h 	340 °
+Jun 30 04:00 2023	 8 km/h 	  	340 °
+Jun 30 03:00 2023	 7 km/h 	  	350 °
+Jun 30 02:00 2023	 18 km/h 	  	40 °
+Jun 30 01:00 2023	 9 km/h 	  	360 °
+Jun 30 00:00 2023	 12 km/h 	  	300 °
+Jun 29 23:00 2023	 13 km/h 	  	300 °
+Jun 29 22:00 2023	 14 km/h 	  	310 °
+Jun 29 21:00 2023	 9 km/h 	  	160 °
+Jun 29 20:00 2023	 13 km/h 	  	310 °
+Jun 29 19:00 2023	 24 km/h 	 40 km/h 	10 °
+Jun 29 18:00 2023	 32 km/h 	 52 km/h 	10 °
+Jun 29 17:00 2023	 28 km/h 	 39 km/h 	40 °
+Jun 29 16:00 2023	 34 km/h 	  	50 °
+Jun 29 15:00 2023	 12 km/h 	 32 km/h 	10 °
+Jun 29 14:00 2023	 12 km/h 	 30 km/h 	20 °
+Jun 29 13:00 2023	 10 km/h 	 28 km/h 	20 °
+Jun 29 12:00 2023	 29 km/h 	  	40 °
+Jun 29 11:00 2023	 22 km/h 	 36 km/h 	310 °
+Jun 29 10:00 2023	 19 km/h 	  	310 °
+Jun 29 09:00 2023	 9 km/h 	  	250 °
+Jun 29 08:00 2023	 12 km/h 	  	290 °
+Jun 29 07:00 2023	 2 km/h 	  	360 °
+Jun 29 06:00 2023	 17 km/h 	  	320 °
+Jun 29 05:00 2023	 17 km/h 	  	330 °
+Jun 29 04:00 2023	 8 km/h 	  	300 °
+Jun 29 03:00 2023	 10 km/h 	  	310 °
+Jun 29 02:00 2023	 3 km/h 	  	250 °
+Jun 29 01:00 2023	 8 km/h 	  	30 °
+Jun 29 00:00 2023	 13 km/h 	  	290 °
+Jun 28 23:00 2023	 14 km/h 	  	320 °
+Jun 28 22:00 2023	 19 km/h 	  	330 °
+Jun 28 21:00 2023	 17 km/h 	  	300 °
+Jun 28 20:00 2023	 24 km/h 	  	330 °
+Jun 28 19:00 2023	 27 km/h 	 47 km/h 	330 °
+Jun 28 18:00 2023	 20 km/h 	  	290 °
+Jun 28 17:00 2023	 17 km/h 	  	40 °
+Jun 28 16:00 2023	 12 km/h 	 30 km/h 	80 °
+Jun 28 15:00 2023	 9 km/h 	  	110 °
+Jun 28 14:00 2023	 21 km/h 	  	60 °
+Jun 28 13:00 2023	 16 km/h 	  	60 °
+Jun 28 12:00 2023	 16 km/h 	  	40 °
+Jun 28 11:00 2023	 7 km/h 	  	20 °
+Jun 28 10:00 2023	 19 km/h 	  	40 °
+Jun 28 09:00 2023	 18 km/h 	  	330 °
+Jun 28 08:00 2023	 10 km/h 	  	340 °
+Jun 28 07:00 2023	 10 km/h 	  	340 °
+Jun 28 06:00 2023	 8 km/h 	  	20 °
+Jun 28 05:00 2023	 7 km/h 	  	340 °
+Jun 28 04:00 2023	 8 km/h 	  	340 °
+Jun 28 03:00 2023	 15 km/h 	  	330 °
+Jun 28 02:00 2023	 4 km/h 	  	250 °
+Jun 28 01:00 2023	 5 km/h 	  	290 °
+Jun 28 00:00 2023	 21 km/h 	  	330 °
+Jun 27 23:00 2023	 6 km/h 	  	350 °
+Jun 27 22:00 2023	 25 km/h 	  	30 °
+Jun 27 21:00 2023	 11 km/h 	  	350 °
+Jun 27 20:00 2023	 11 km/h 	  	180 °
+Jun 27 19:00 2023	 18 km/h 	 29 km/h 	290 °
+Jun 27 18:00 2023	 18 km/h 	 30 km/h 	190 °
+Jun 27 17:00 2023	 39 km/h 	 48 km/h 	40 °
+Jun 27 16:00 2023	 24 km/h 	 39 km/h 	50 °
+Jun 27 15:00 2023	 10 km/h 	 29 km/h 	20 °
+Jun 27 14:00 2023	 26 km/h 	  	40 °
+Jun 27 13:00 2023	 26 km/h 	  	50 °
+Jun 27 12:00 2023	 34 km/h 	  	40 °
+Jun 27 11:00 2023	 25 km/h 	 32 km/h 	10 °
+Jun 27 10:00 2023	 23 km/h 	  	360 °
+Jun 27 09:00 2023	 36 km/h 	  	320 °
+Jun 27 08:00 2023	 3 km/h 	  	350 °
+Jun 27 07:00 2023	 6 km/h 	  	260 °
+Jun 27 06:00 2023	 5 km/h 	  	290 °
+Jun 27 05:00 2023	 12 km/h 	  	330 °
+Jun 27 04:00 2023	 15 km/h 	  	320 °
+Jun 27 03:00 2023	 16 km/h 	  	40 °
+Jun 27 02:00 2023	 6 km/h 	  	330 °
+Jun 27 01:00 2023	 18 km/h 	  	320 °
+Jun 27 00:00 2023	 9 km/h 	  	340 °
+Jun 26 23:00 2023	 7 km/h 	  	20 °
+Jun 26 22:00 2023	 17 km/h 	  	320 °
+Jun 26 21:00 2023	 17 km/h 	  	310 °
+Jun 26 20:00 2023	 16 km/h 	  	300 °
+Jun 26 19:00 2023	 14 km/h 	  	290 °
+Jun 26 18:00 2023	 7 km/h 	  	250 °
+Jun 26 17:00 2023	 17 km/h 	  	40 °
+Jun 26 16:00 2023	 12 km/h 	  	60 °
+Jun 26 15:00 2023	 11 km/h 	  	30 °
+Jun 26 14:00 2023	 12 km/h 	 28 km/h 	70 °
+Jun 26 13:00 2023	 14 km/h 	  	40 °
+Jun 26 12:00 2023	 5 km/h 	  	60 °
+Jun 26 11:00 2023	 10 km/h 	  	290 °
+Jun 26 10:00 2023	 14 km/h 	  	300 °
+Jun 26 09:00 2023	 8 km/h 	  	280 °</textarea><br/><input type='submit' value='Convert to Simple Format' onclick='convert()'></td></tr></table>
+Canvas Width:<input type='text' value='2000' id='cw'> Canvas Height:<input type='text' value='2000' id='ch'><br/>
+StartX:<input type='text' value='1000' id='sx'> StartY:<input type='text' value='1000' id='sy'><br/>
+LineWidth:<input type='text' value='1.0' id='lw'> MaxLineWidth:<input type='text' value='1.0' id='mlw'> ScaleFactor:<input type='text' value='1.0' id='factor'><br/>
+<input type="file" id="fileInput" accept=".png,.jpg,.gif" /><br/>
+<canvas id='canvasi'></canvas>
+
+<input type='submit' value='Draw Wind Curve' onclick='restart()'> <input type='submit' value='Draw Wind Curve in Center of Canvas Auto Scale to 3000px Large Edge' onclick='restart();centerdraw();'><br/>
+<input type='submit' value='Save Curve 1' onclick='saveCurve1()'><input type='submit' value='Save Curve 2' onclick='saveCurve2()'><input type='submit' value='Animate' onclick='animate1()'>Frames:<input type='text' value='100' id='frames'><input type='checkbox' id='showall'>Show All Frames<br/>
+<input type='submit' value='Animate Endlessly Toggle' onclick='endlessAnimation()'><input type='checkbox' checked id='endlessrandomwidths'>Endless Random Widths<br/>
+<input type='checkbox' id='darkmode' onchange='changemode()'>Draw Dark Mode<br/>
+<canvas id='canvas' style='border: 1px solid black;'></canvas><br/>
+<script>
+currentCurve = [];
+// CODE BELOW FOUND at: https://stackoverflow.com/questions/34681457/html5-canvas-bezier-curve-get-all-the-points ====================================
+// Given the 4 control points on a Bezier curve 
+// get x,y at interval T along the curve (0<=T<=1)
+// The curve starts when T==0 and ends when T==1
+function getCubicBezierXYatPercent(startPt, controlPt1, controlPt2, endPt, percent) {
+    var x = CubicN(percent, startPt.x, controlPt1.x, controlPt2.x, endPt.x);
+    var y = CubicN(percent, startPt.y, controlPt1.y, controlPt2.y, endPt.y);
+    return ({
+        x: x,
+        y: y
+    });
+}
+
+// cubic helper formula
+function CubicN(T, a, b, c, d) {
+    var t2 = T * T;
+    var t3 = t2 * T;
+    return a + (-a * 3 + T * (3 * a - a * T)) * T + (3 * b + T * (-6 * b + b * 3 * T)) * T + (c * 3 - c * 3 * T) * t2 + d * t3;
+}
+//======================================================================================================================================================
+	background = "white";
+	foreground = "black";
+	function changemode(){
+		if (document.getElementById("darkmode").checked){
+			background = "black";
+			foreground = "white";
+		}else{
+			background = "white";
+			foreground = "black";
+		}
+	}
+	img = 0;
+	canvasi = document.getElementById('canvasi');
+	ctxi = canvasi.getContext("2d");
+	 function handleFileSelect(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function(event) {
+        img = new Image();
+
+        // Load the selected image
+        img.onload = function() {
+        	canvasi.width = img.width;
+        	canvasi.height = img.height;
+            ctxi.drawImage(img,0,0);
+            loadDataFromImage();
+        };
+
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Attach the file selection event listener
+    const fileInput = document.getElementById('fileInput');
+    fileInput.addEventListener('change', handleFileSelect);
+
+winds = [];
+fwinds = [];
+windstep = 15;
+function loadDataFromImage(){
+	// samplex = 11;
+	// sampley = 11;
+	// sectx = img.width/samplex;
+	// secty = img.height/sampley;
+	// datasimple = [];
+	// for (iy=1;iy<=samplex-1;iy++){
+	// 	for (ix=1;ix<=sampley-1;ix++){
+	// 		pix = ctxi.getImageData(parseInt(ix*sectx),parseInt(iy*secty), 1, 1).data;
+	// 		//use red value as speed and average of g and b as angle
+	// 		speed = parseInt(pix[0]*100/255); //red as speed
+	// 		angle = parseInt((pix[1]+pix[2])/2*360/255);
+	// 		datasimple.push([speed,angle]);
+	// 	}
+	// }
+	// document.getElementById('data').value = datasimple.join("\n");
+	canvas.width = img.width;
+	canvas.height = img.height;
+}
+function convert(){
+	datacomplex = document.getElementById('datacomplex').value.split("\n");
+	datasimple = [];
+	for (var i=0;i<datacomplex.length;i++){
+		datasimple.push(datacomplex[i].replace(/^.*\t ([0-9]{1,3}) km.*h \t.*\t([0-9]{1,3}) .*/g,"$1,$2"));
+	}
+	document.getElementById('data').value = datasimple.join("\n");
+}
+function randomdata(){
+	datasimple = [];
+	for (var i=0;i<50;i++){
+		datasimple.push([Math.floor(Math.random()*100),Math.floor(Math.random()*360)]);
+	}
+	document.getElementById('data').value = datasimple.join("\n");	
+}
+function shuffledata(){
+	document.getElementById('data').value = document.getElementById('data').value.split("\n").sort(function (a,b){return Math.random()-0.5;}).join("\n");
+}
+
+function drawit(){
+	//read data from textarea
+
+	w = canvas.width;
+	h = canvas.height;
+	winds = [];
+	data = document.getElementById('data').value.split('\n');
+	for (var i=0;i<data.length;i++){
+		thisdata = data[i].split(",");
+		if (thisdata.length==2){
+			winds.push([parseFloat(thisdata[0]),parseFloat(thisdata[1])]);
+		}
+	}
+	winds.reverse();//reverse it because it's in reverse order
+	ctx.fillStyle = background;
+	//ctx.fillRect(0,0,canvas.width,canvas.height);
+	//ctx.clearRect(0,0,w,h);
+	s = 0;
+	fwinds = [];
+	for (var i=0;i<winds.length-1;i++){
+		fwinds.push(winds[i]);
+		angleend = winds[i+1][1];
+		anglestart = winds[i][1];
+			if ((angleend>=anglestart && angleend-anglestart<180) || (angleend<=anglestart && anglestart-angleend<180)){
+				//do nothing it's going the right direction	using regular math below out of if statement
+			}else{//meaning we need to cross 360 mark
+				if (angleend > anglestart){
+					anglestart += 360;
+				}else if (angleend < anglestart){
+					angleend += 360;
+				}
+			}
+		for (var j=1;j<windstep;j++){
+			stepspeed = winds[i][0]+(winds[i+1][0]-winds[i][0])/windstep*j;
+			stepangle = anglestart+(angleend-anglestart)/windstep*j;
+			fwinds.push([stepspeed,stepangle]);
+		}
+	}
+	run();
+}
+	w = 2000;
+	h = 2000;
+	canvas = document.getElementById('canvas');
+	ctx = canvas.getContext("2d");
+	// canvas.width = w;
+	// canvas.height = h;
+	dots = 800;
+	velocity = 10;
+	pix = [];
+	vel = [];
+	windspeed = 12/60; //km
+	windangle = 45; //degrees
+	windradians = windangle*2.0*Math.PI/360.0;
+	for (var i=0;i<dots;i++){
+		//x = Math.random()*w;
+		//y = Math.random()*h;
+		x = w/2; y=h/2;
+		velx = Math.random()*velocity-velocity/2.0;
+		vely = Math.random()*velocity-velocity/2.0;
+		pix.push([x,y]);
+		vel.push([velx,vely]);
+	}
+	//steps = 10;//use fwinds.length;
+	s = 0;
+	
+	vx = 0;
+	vy = 0;
+	minx = 5000;
+	miny = 5000;
+	maxx = -5000;
+	maxy = -5000;
+	lwidth = 0;
+	maxlwidth = 0;
+	function run(){
+		//currentCurve = [];
+		minx = 5000;
+	miny = 5000;
+	maxx = -5000;
+	maxy = -5000;
+		//ctx.clearRect(0,0,w,h);
+		while (s<fwinds.length){
+			windspeed = fwinds[s][0]/120;
+			windangle = fwinds[s][1];
+			windradians = (windangle%360)/360.0*2.0*Math.PI;
+			// for (var i=0;i<dots;i++){
+			// 	for (var l=0;l<3;l++){
+					
+			// 		
+					
+
+			// 		if (i%2==0){
+			// 			ctx.strokeStyle = "black";
+			// 		}else{	
+			// 			ctx.strokeStyle = "black";
+			// 		}
+	  //    			[ox,oy] = pix[i];
+			// 		ctx.beginPath();
+			// 		ctx.moveTo(ox,oy);
+			// 		[velx,vely] = vel[i];
+			// 		x = ox+velx;
+			// 		y = oy+vely;
+			// 		ctx.lineTo(x,y);
+			// 		ctx.stroke();
+			// 		velx += Math.cos(windradians)*windspeed;
+			// 		vely += Math.sin(windradians)*windspeed;
+					
+			// 		if (x<0 || x>w || y<0 || y> h){//reset it
+			// 			x = w/2; y=h/2;
+			// 			velx = Math.random()*velocity-velocity/2.0;
+			// 			vely = Math.random()*velocity-velocity/2.0;
+			// 		}
+			// 		pix[i] = [x,y];
+			// 		vel[i] = [velx,vely];
+			// 	}	
+			// }
+			// ctx.fillText("wind",100,90);
+			ctx.strokeStyle = "black";
+			ctx.lineCap = "round";
+			lwidth = parseFloat(document.getElementById('lw').value);
+			maxlwidth = parseFloat(document.getElementById('mlw').value);
+			ctx.beginPath();
+			if (join==1){
+				if (s>0){
+					ctx.moveTo(ox,oy);
+				}
+			}else{
+				ctx.moveTo(x,y);
+				if (s==0){
+					//currentCurve.push([x,y]);
+				}
+			}
+			ix = Math.cos(windradians)*windspeed*5*parseFloat(document.getElementById('factor').value); iy = Math.sin(windradians)*windspeed*5*parseFloat(document.getElementById('factor').value);
+			//vx += ix; vy += iy;
+			ctx.lineWidth = Math.min(1*lwidth/(ix**2+iy**2)**0.5+0.0000001,maxlwidth);
+			nx = x+ix; ny = y+iy;
+			if (join==1){ //joining mode
+				offxinc = -offx/fwinds.length*s;
+				offyinc = -offy/fwinds.length*s;
+				thispointx = startx + offx/fwinds.length*(s+1);
+				thispointy = starty + offy/fwinds.length*(s+1);
+			}
+			if (join==1){
+				radians = (s+1)/fwinds.length*Math.PI*2.0;
+				radius = parseInt(document.getElementById('radius').value);
+				circleoffx = Math.cos(radians)*radius;
+				circleoffy = Math.sin(radians)*radius;
+				//ctx.lineTo(nx-thispointx,ny+thispointy);
+				ctx.fillStyle="black";
+				//ctx.fillRect(startx+(nx-thispointx),starty+(ny-thispointy),2,2);
+
+				ctx.lineTo(startx+(nx-thispointx)+circleoffx,starty+(ny-thispointy)+circleoffy);
+				dx = startx+(nx-thispointx)+circleoffx;
+				dy = starty+(ny-thispointy)+circleoffy;
+				ox = dx;
+				oy = dy;
+			}else{
+				ctx.lineTo(nx,ny);
+				//currentCurve.push([nx,ny]);
+			}
+			ctx.strokeStyle = foreground;
+			//ctx.stroke();
+			x = nx; y = ny;
+			if (x<minx){minx = x;}
+			if (x>maxx){maxx = x;}
+			if (y<miny){miny = y;}
+			if (y>maxy){maxy = y;}
+
+			s += 1;
+			// //s = 0;
+		}
+	}
+	x = w/2;
+	y = h/2;
+	reset = 0;
+	sx = 0;
+	sy = 0;
+	ex = 0;
+	ey = 0;
+	calculated = 0;
+	startx = 0;
+	starty = 0;
+ 	join = 0;
+ 	offsetx = 0;
+ 	offsety = 0;
+ 	offxinc = 0;
+ 	offyinc = 0;
+ 	thispointx = 0;
+ 	thispointy= 0;
+ 	dx = 0;
+ 	dy = 0;
+ 	ox = 0;
+ 	oy = 0;
+ 	donotchangefactor = 0;
+	function joindraw(){
+		donotchangefactor = 1;
+		centerdraw();
+		
+		join = 1;
+		ex = x; ey=y;
+		offx = (ex-startx);
+		offy = (ey-starty);
+		x = sx;
+		y = sy;
+		ox = x;
+		oy = y;
+		vx = 0;
+		vy = 0;
+		s = 0;
+		radians = (s+1)/fwinds.length*Math.PI*2.0;
+		radius = parseInt(document.getElementById('radius').value);
+		circleoffx = Math.cos(radians)*radius;
+		circleoffy = Math.sin(radians)*radius;
+		canvas.width = parseInt(document.getElementById('cw').value);
+	    canvas.height = parseInt(document.getElementById('ch').value);
+		drawit();
+
+		join = 0;
+		donotchangefactor = 0;
+	}
+	function centerdraw(){
+		//alert("centerdraw");;
+		if (currentCurve.length == 0){//no marks yet
+			//alert("first");
+			do{
+				x = parseInt(Math.random()*canvas.width);
+				y = parseInt(Math.random()*canvas.height);
+				pix = ctxi.getImageData(x,y,1,1).data;
+			}while(pix[3]==0);
+			currentCurve.push([x,y]);
+		}else{
+			//alert("after");
+			//there is an old location we should try to draw a line to there
+			do{
+				ox = currentCurve[0][0]; oy = currentCurve[0][1];
+				step = 2000;
+				x = Math.max(0,Math.min(img.width,ox+parseInt(Math.random()*step-step/2.0)));
+				y = Math.max(0,Math.min(img.height,oy+parseInt(Math.random()*step-step/2.0)));
+				good = 1;
+				samples = 50;
+				for (var i=1;i<samples;i++){
+					ix = parseInt(ox+(x-ox)/samples*i);
+					iy = parseInt(oy+(y-oy)/samples*i);
+					pix = ctxi.getImageData(ix,iy,1,1).data;
+					if (pix[3]<127){
+						good = 0; //found a blank pixel so we can't get there without crossing a blank set to no good
+						break;
+					}
+					
+				}
+			}while(good==0);
+			//we can go to that location without crossing a blank pixel
+			currentCurve = [];
+			currentCurve.push([x,y]);
+		}
+	}
+	function centerdrawbk(){
+		width = maxx-minx;
+		height = maxy-miny;
+		border = Math.max(width/5.0,height/5.0);
+		if (calculated == 0){
+			borderShouldBe = 3000/6.0;
+			if (width >= height){
+				factorShouldBe = 3000/6.0*5.0/width;
+			}else if (width < height){
+				factorShouldBe = 3000/6.0*5.0/height;
+			}
+			if (donotchangefactor==0){
+			document.getElementById('factor').value = parseFloat(document.getElementById('factor').value)*factorShouldBe;
+			}
+			restart();
+			calculated = 1;
+			centerdraw();
+		} else {
+
+			canvas.width = width + border;
+			canvas.height = height + border;
+			if (join==0){
+				startx = sx - minx + border/2.0;
+			    starty = sy - miny + border/2.0;
+		    }
+			x = sx - minx + border/2.0;
+			y = sy - miny + border/2.0;
+			ox = x;
+			oy = y;
+			vx = 0;
+			vy = 0;
+			s = 0;
+			drawit();
+			calculated = 0;
+		}
+	}	
+	function restart(){
+		// canvas.width = parseInt(document.getElementById('cw').value);
+	 //    canvas.height = parseInt(document.getElementById('ch').value);
+		reset = 0;
+		sx = parseInt(document.getElementById('sx').value);
+		sy = parseInt(document.getElementById('sy').value);
+		x = sx;
+		y = sy;
+
+		vx = 0;
+	vy = 0;
+	// minx = 0;
+	// miny = 0;
+	// maxx = w;
+	// maxy = h;
+
+	drawit();
+	}
+	//setInterval(run,1);
+	restart();
+	curve1 = [];
+	curve2 = [];
+	curve3 = [];
+	curves = [];//contains interpolation
+	awidth = 0;
+	aheight = 0;
+	alinewidth1 = 0;
+	amlinewidth1 = 0;
+	alinewidth2 = 0;
+	amlinewidth2 = 0;
+	alinewidth3 = 0;
+	amlinewidth3 = 0;
+	alinewidths = [];
+	amlinewidths = [];
+	function saveCurve1(){
+		curve1 = currentCurve.slice();
+		awidth = canvas.width;
+		aheight = canvas.height;
+		alinewidth1 = lwidth;
+		amlinewidth1 = maxlwidth;
+	}
+	function saveCurve2(){
+		curve2 = currentCurve.slice();
+		awidth = Math.max(canvas.width,awidth);
+		aheight = Math.max(canvas.height,aheight);
+		alinewidth2 = lwidth;
+		amlinewidth2 = maxlwidth;
+	}
+	function saveCurve3(){
+		curve3 = currentCurve.slice();
+		// awidth = Math.max(canvas.width,awidth);
+		// aheight = Math.max(canvas.height,aheight);
+		alinewidth3 = lwidth;
+		amlinewidth3 = maxlwidth;
+	}
+	cf = 0; //currentframe;
+	cfinc = 1;
+	oldcoords = [];
+	function nextframe(){
+
+		if (cf >= 0){
+			//draw frame with all white first
+			// if (//cf==0 || 
+			// !document.getElementById('showall').checked){//if first frame or if not checked all frames
+			// 	ctx.fillStyle = background;
+			//  	ctx.fillRect(0,0,canvas.width,canvas.height);
+			// }
+
+			//now draw curve
+			for (var i=0;i<curves[cf].length-1;i++){
+				ix = curves[cf][i+1][0]-curves[cf][i][0];
+				iy = curves[cf][i+1][1]-curves[cf][i][1];
+				ctx.beginPath();
+				ctx.lineWidth = Math.min(1.0*alinewidths[cf]/(ix**2+iy**2)**0.5+0.0000001,amlinewidths[cf]);
+				ctx.lineCap = "round";
+				ctx.moveTo(curves[cf][i][0],curves[cf][i][1]);
+				ctx.lineTo(curves[cf][i+1][0],curves[cf][i+1][1]);
+				ctx.strokeStyle = foreground;
+				//ctx.stroke();
+			}	
+			cf+=cfinc;
+			if (cf>frames){
+				cfinc = -1;
+				cf = frames-1;
+			}
+			setTimeout(nextframe,1);
+		}
+	}
+
+	function nextframeendless(){
+
+		if (cf <= frames && animating==1){
+			//draw frame with all white first
+			// if (//cf==0 || 
+			//  !document.getElementById('showall').checked){//if first frame or if not checked all frames
+			// 	ctx.fillStyle = background;
+			// 	ctx.fillRect(0,0,canvas.width,canvas.height);
+			// }
+
+			//now draw curve
+			// for (var i=0;i<curves[cf].length-1;i++){
+			// 	ix = curves[cf][i+1][0]-curves[cf][i][0];
+			// 	iy = curves[cf][i+1][1]-curves[cf][i][1];
+			// 	ctx.fillStyle = foreground;
+			// 	ctx.lineWidth = Math.min(1*alinewidths[cf]/(ix**2+iy**2)**0.5+0.0000001,amlinewidths[cf]);
+			// 	dist = (ix**2+iy**2)**0.5/100+0.0000001;
+			// 	ctx.fillRect(curves[cf][i][0],curves[cf][i][1],dist,dist)
+			// 	ctx.lineCap = "round";
+				
+				
+			// 	// //ctx.moveTo(curves[cf][i][0],curves[cf][i][1]);
+			// 	// //ctx.lineTo(curves[cf][i+1][0],curves[cf][i+1][1]);
+				
+				
+			// }	
+			
+			ctx.strokeStyle = foreground;
+			ctx.fillStyle = foreground;
+			for (var i=0;i<curves[cf].length;i++){
+				if (oldcoords.length == 0){
+					oldcoords.push([curves[cf][i][0],curves[cf][i][1]]);
+				}else{
+					ctx.beginPath();
+					ctx.moveTo(oldcoords[0],oldcoords[1]);
+					ctx.lineTo(curves[cf][i][0],curves[cf][i][1]);
+					ix = Math.abs(curves[cf][i][0]-oldcoords[0]);
+					iy = Math.abs(curves[cf][i][1]-oldcoords[1]);
+					if (ix>0 && iy>0){
+					ctx.lineWidth = Math.min(1*parseFloat(document.getElementById('lw').value)/(ix**2+iy**2)**0.5+0.0000001,parseFloat(document.getElementById('mlw').value));
+					//ctx.lineWidth = 2;
+					ctx.stroke();
+					}
+					oldcoords = [curves[cf][i][0],curves[cf][i][1]];
+				}
+			}
+			// for (var i=0;i<curves[cf].length-1;i++){
+			// 	for (var j=i;j<curves[cf].length;j++){
+			// 		ctx.beginPath();
+			// 		ctx.moveTo(curves[cf][i][0],curves[cf][i][1]);
+			// 		ctx.lineTo(curves[cf][j][0],curves[cf][j][1]);
+			// 		ctx.stroke();
+			// 	}
+			// }
+			cf+=cfinc;
+			setTimeout(nextframeendless,1);
+		}else{
+			gray = Math.floor(Math.random()*256);
+			foreground = "rgb("+gray+","+gray+","+gray+")";
+			endlessnext();
+		}
+	}
+	frames = 0;
+	function animate1(){
+		
+		//set up canvas
+		canvas.width = awidth;
+		canvas.height = aheight;
+		//interpolation between 2 curves
+		frames = parseInt(document.getElementById('frames').value);
+		curves = [];//reset curves
+		alinewidths = [];
+		amlinewidths = [];
+		for (var i=0;i<=frames;i++){//for each frame
+			curves.push([]);//push empty array
+			for (var j=0;j<curve1.length;j++){//loop through each point of curve1
+				//interpolate point
+				px = curve1[j][0] + (curve2[j][0]-curve1[j][0])/frames * i;
+				py = curve1[j][1] + (curve2[j][1]-curve1[j][1])/frames * i;
+				curves[i].push([px,py]);
+
+			}
+			lw = alinewidth1 + (alinewidth2-alinewidth1)/frames * i;
+			mlw = amlinewidth1 + (amlinewidth2-amlinewidth1)/frames * i;
+			alinewidths.push(lw);
+			amlinewidths.push(mlw);
+		}
+		//animation.
+		cf = 0;
+		cfinc = 1;
+		setTimeout(nextframeendless,1);
+	}
+	nextcPs = [];
+	lastcPs = [];
+	function animate1endless(){
+		if (first == 1){
+		}
+		//set up canvas
+		
+		//interpolation between 2 curves
+		frames = parseInt(document.getElementById('frames').value);
+		curves = [];//reset curves
+		alinewidths = [];
+		amlinewidths = [];
+		for (var i=0;i<=frames;i++){//for each frame
+			curves.push([]);//push empty array
+			percent = 1.0*i/frames;
+			for (var j=0;j<curve1.length;j++){//loop through each point of curve1
+				//interpolate point
+				//px = curve1[j][0] + (curve2[j][0]-curve1[j][0])/frames * i;
+				//py = curve1[j][1] + (curve2[j][1]-curve1[j][1])/frames * i;
+				P1 = {x:curve1[j][0],y:curve1[j][1]};
+				P2 = {x:curve2[j][0],y:curve2[j][1]};
+				P3 = {x:curve3[j][0],y:curve3[j][1]};
+				if (first == 1){
+					cP1 ={x:P1.x+(P2.x-P1.x)/2,y:P1.y+(P2.y-P1.y)/2};
+					if (i==0){ //only calculate once
+						oP ={x:((P2.x-P1.x)+(P3.x-P2.x))/2,y:((P2.y-P1.y)+(P3.y-P2.y))/2}; //control point to smooth sharp Edge transition
+					}else{
+						oP = nextcPs[j]; //reuse for later frames.
+					}
+					cP2 = {x:P2.x-oP.x,y:P2.y-oP.y};//cP2 is negative of oP
+					if (i==0){nextcPs.push(oP);}
+				}else{
+					cP1 = {x:P1.x+lastcPs[j].x,y:P1.y+lastcPs[j].y};
+					if (i==0){
+						oP ={x:((P2.x-P1.x)+(P3.x-P2.x))/2,y:((P2.y-P1.y)+(P3.y-P2.y))/2}; //control point to smooth sharp Edge transition
+					}else{
+						oP = nextcPs[j];
+					}
+					cP2 = {x:P2.x-oP.x,y:P2.y-oP.y};//cP2 is negative of oP
+					if (i==0){nextcPs[j]=oP;}
+				}
+				p = getCubicBezierXYatPercent(P1,cP1,cP2,P2,percent);
+				curves[i].push([p.x,p.y]);
+			}
+			
+			lw = alinewidth1 + (alinewidth2-alinewidth1)/frames * i;
+			mlw = amlinewidth1 + (amlinewidth2-amlinewidth1)/frames * i;
+			alinewidths.push(lw);
+			amlinewidths.push(mlw);
+		}
+		lastcPs = nextcPs.slice();
+		//animation.
+		cf = 0;
+		cfinc = 1;
+		first = 0;
+		//first = 0;
+		nextframeendless();
+	}
+	animating = 0;
+	function endlessnext(){
+		if (animating == 1){
+			curve1 = curve2.slice();
+			alinewidth1 = alinewidth2;
+			amlinewidth1 = amlinewidth2;
+			curve2 = curve3.slice();
+			alinewidth2 = alinewidth3;
+			amlinewidth2 = amlinewidth3;
+			randomdata();
+			restart();
+			if (document.getElementById("endlessrandomwidths").checked){
+				document.getElementById('lw').value = Math.random()*800+40;
+				document.getElementById('mlw').value = Math.random()*60+10;
+			}
+			centerdraw();
+			saveCurve3();
+			animate1endless();
+		}
+	}
+	first=1;
+	function endlessAnimation(){
+
+		if (animating == 0){
+			canvas.width = img.width;
+			canvas.height = img.height;
+			oldcoords = [];
+			first = 1;
+			animating = 1;
+			//get curve 1
+			randomdata();
+			restart();
+			if (document.getElementById("endlessrandomwidths").checked){
+				document.getElementById('lw').value = Math.random()*800+40;
+				document.getElementById('mlw').value = Math.random()*60+10;
+			}
+			centerdraw();
+			saveCurve1();
+
+
+			//get curve 2
+			randomdata();
+			restart();
+			if (document.getElementById("endlessrandomwidths").checked){
+				document.getElementById('lw').value = Math.random()*800+40;
+				document.getElementById('mlw').value = Math.random()*60+10;
+			}
+			centerdraw();
+			saveCurve2();
+
+			//get curve 3
+			randomdata();
+			restart();
+			if (document.getElementById("endlessrandomwidths").checked){
+				document.getElementById('lw').value = Math.random()*800+40;
+				document.getElementById('mlw').value = Math.random()*60+10;
+			}
+			centerdraw();
+			saveCurve3();
+			animate1endless();
+		}else{
+			animating = 0;
+		}
+	}
+</script>
