@@ -1,28 +1,47 @@
-<meta charset='UTF-8'>
-Chant/Niệm:<input type='text' value='Nam Mô A Di Đà Phật' id='chant' size=40><br/>
-Url:<input disabled type='text' value='https://rawcdn.githack.com/tindoductran/tlf/main/niemphat/chantreply.html' id='urlstr' size=40><br/>
-Count/Đếm:<span id='counter'></span><br/>
-Long Url:<span id='longurl'></span><br/>
-Iframe below:<br/>
-<iframe id='myframe' width="600" height="60"></iframe>
-<script>
-	var count = 0;
-	var delay = 0;
-	var longurl = "";
-	function run(){
-		longurl = document.getElementById('urlstr').value + "?chant=" + document.getElementById('chant').value;
-		document.getElementById('longurl').innerHTML = longurl;
-		document.getElementById('myframe').src = longurl;
-		count += 1;
-		document.getElementById('counter').innerHTML = count;
-	}
-	run();
-</script><br/><br/>
-Instructions:<br/>
-This page will request/send a chant at (delay seconds) intervals to the chant.php (which is physically located in Kansas, US).<br/>
-Then the result of the chant.php will receive the sent chant and show in the Iframe<br/>
-So basically, the chant will go both ways from your computer through the internet to Kansas and back again at every interval.<br/>
-You can change the chant to anything you wish.<br/>
-The count will keep track of how many chants have been send/received (since page load/refresh).<br/>
-<a href="/index.php">Back home</a>
+<meta charset="UTF-8">
+<h2>Router Chanter</h2>
+This will send requests to your (own) router continously, one after another as soon as a response is received.<br/>
+Enter your router link/IP: <input type='text' id='routerlink' value='http://192.168.0.1'><br/>
+Enter your chant/phrase to chant:<br/><textarea id="chantBox" rows="4" cols="50">Nam Mô A Di Đà Phật</textarea><br/>
+<button id="goButton">START SENDING CHANTS</button>
+<div id="response"></div>
+  Response Step received from Sent Request:<span id='responsecounter'></span><br/>
+  Data Step received from Sent Request:<span id='datacounter'></span><br/>
+  <script>
+    document.getElementById('goButton').addEventListener('click', function() {
+        let chant = document.getElementById('chantBox').value;
+        let routerlink = document.getElementById('routerlink').value;
+        let encodedChant = encodeURIComponent(chant);
+        let url = `${routerlink}?chant=${encodedChant}`;
+        let datacounter = 0;
+        let responsecounter = 0;
+        function sendRequest() {
+            fetch(url, {
+              method: 'GET',
+              mode: 'no-cors', // 'cors' by default
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            })
+            .then(response => {
+              responsecounter += 1;
+                document.getElementById('responsecounter').innerHTML = responsecounter;
+            })
+            .then(data => {
+                //console.log(data);
+                document.getElementById('response').textContent = JSON.stringify(data);
+                datacounter += 1;
+                document.getElementById('datacounter').innerHTML = datacounter;
+                sendRequest();
+            })
+            .catch((error) => {
+              //console.error('Error:', error);
+            });
+        }
 
+        sendRequest();
+    });
+</script>
+<br/>
+<b>Note: I didn't program this myself, I described it to chatGPT and it programmed it for me.<br/>
+I did edited some things such as information and counters but logics was all done by ChatGPT.</b><br/>
